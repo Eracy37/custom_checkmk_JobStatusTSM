@@ -16,6 +16,7 @@
 # If you have more than once instance, make sure that the upper
 # login works on all of them.
 
+domain_name=XXX
 output_file="/usr/lib/check_mk_agent/local/result_check_job-TSM.txt"
 temp_file=$(mktemp)
 
@@ -32,14 +33,14 @@ dsmcmd="dsmadmc -id=$TSM_USER -pass=$TSM_PASSWORD -dataonly=yes -tab"
     check_jobs() {
        local schedule=$1
        jobs=$($dsmcmd <<EOF
-select distinct node_name from events where scheduled_start >= '1900-01-01' and scheduled_start>current_timestamp-24 hour and domain_name='SFSTSM01_FILE' and schedule_name IN '$schedule'
+select distinct node_name from events where scheduled_start >= '1900-01-01' and scheduled_start>current_timestamp-24 hour and domain_name='$domain_name' and schedule_name IN '$schedule'
 EOF
     )
 
        while IFS= read -r job; do
            [ -z "$job" ] && continue
            output=$($dsmcmd <<EOF
-select node_name, status, schedule_name, scheduled_start, completed from events where scheduled_start >= '1900-01-01' and scheduled_start>current_timestamp-24 hours and domain_name='SFSTSM01_FILE' and node_name='$job' and schedule_name I
+select node_name, status, schedule_name, scheduled_start, completed from events where scheduled_start >= '1900-01-01' and scheduled_start>current_timestamp-24 hours and domain_name='$domain_name' and node_name='$job' and schedule_name I
 N '$schedule' order by completed desc
 EOF
         )
