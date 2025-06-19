@@ -12,11 +12,9 @@ Script for Job status Tivoli IBM - Compatibility AIX
 # If you have more than once instance, make sure that the upper
 # login works on all of them.
 ```
-Add the script in crontab so that it runs every 10 minutes
+Add the script to crontab so it runs every 10 minutes
 
-The script is slow, so you need to create another script to read the result of the script in ```/usr/lib/check_mk_agent/local```
-File : result_check_job-TSM.txt
+The script is slow, so you need to create another script to read its result in ```/usr/lib/check_mk_agent/local```
+File: result_check_job-TSM.txt
 
-### Use
-
-Checkmk agent do an inventory for result.
+Modify domain_name in script : ```domain_name=XXX```
